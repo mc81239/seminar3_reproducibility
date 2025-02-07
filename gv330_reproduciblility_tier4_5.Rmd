@@ -1,0 +1,64 @@
+---
+title: 'GV330: Seminar 3, Reproducibility -- Tiers 4 and 5'
+author: ""
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Tier 5: Groundhog for Package Dependencies
+
+The best thing about `R` is all the packages. This is also the worst thing about `R` in terms of reproducibility, because packages change over time. Here we will walk through using `groundhog` for package version freezing. The primary alternative for this is `renv`, which is a more sophisticated but also heavier package. For most academic uses I think `groundhog` is sufficient, while `renv` is useful for more intense applications (and plays nicely with `targets` below), and for those who like using R projects (which we aren't doing here). You can see more about groundhog [here](https://groundhogr.com/), and `renv` [here](https://rstudio.github.io/renv/articles/renv.html).
+
+```{r groundhog}
+
+library(groundhog)
+
+groundhog.date <- "2025-01-01" # Note: Do not use a relative date here, e.g. `Sys.Date()-7`!!! Set an explicit date otherwise you undermine the entire goal of groundhog!
+pkgs <- c("dplyr", "ggplot2", "readr", "targets")
+groundhog::groundhog.library(pkgs, groundhog.date)
+
+```
+
+What's going on in the above code chunk? Essentially, we specify a date (this date can evolve as we work on the project, but should be locked/hard-coded once our project is 'complete'). We then specify particular packages. And then we ask groundhog to load the date-specific version of those packages. 
+
+## Tier 5: Targets for Dependency Detection
+
+We're now going to experiment with an automated workflow with understood dependencies. We will use the package `targets` to do so. The idea here is that we will build a directed acyclic graph (DAG) that represents the various objects (function!) in our workflow, and how they are connected. The function `use_targets()` creates a `_targets.R` file for us (in this repo it is already created and has been edited ahead of time). We use this file to **orchestrate** our workflow -- indicating what the order of operations, and dependencies is. It's easier than it sounds!
+
+```{r targets}
+use_targets()
+
+# let's look at what the targets (modules) of our program are:
+tar_manifest()
+
+# and now let's look at the orchestration DAG (note, you can move the nodes around and zoom in/out):
+tar_visnetwork() 
+
+# now we execute our program
+tar_make()
+
+# and we can inspect the results
+tar_read(model_life_exp)
+tar_read(model_gdp_pc)
+tar_read(plot_life_exp)
+tar_read(plot_gdp_pc)
+
+# let's re-inspect our workflow DAG -- what has changed? 
+tar_visnetwork()
+
+# try to re-make the pipeline -- what happens? 
+tar_make()
+
+# now let's go and edit our actual functions... then check the network... then re-run -- what happens? 
+tar_visnetwork()
+tar_make()
+```
+
+Note that we have interwoven our package dependency solution (in this case `groundhog`, but you could easily do the same with `renv`) into `targets`. Check the `_targets.R` file -- we have replaced the `library(targets)` call with `groundhog::groundhog.library` for all our packages. Note, this is slightly less efficient than the built in `tar_set_opts()` function in that we will **always** run the package call, rather than **only** those packages required for the targets that need to be rerun -- using `tar_renv()` will support this. But for most applications the `groundhog` approach should be ok.
+
+
+
