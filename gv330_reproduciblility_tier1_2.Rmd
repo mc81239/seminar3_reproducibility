@@ -58,9 +58,6 @@ saveRDS(scaled_data, "./data/processed/WHR_2017_processed.rds")
 
 # let's have a quick peak at our environment/workspace... it's quite messy! lots of objects floating around. we'll come back to this point soon.
 ls()
-
-# clean up the workspace so we can move to the next task:
-rm(list = ls())
 ```
 
 Finally, we can run some analyses using our cleaned data:
@@ -79,7 +76,7 @@ ggsave(plot, file = paste0(figure_dir,"plot_gdp_pc.jpg"))
 lm(Happiness_score ~ GDP_pc, data = data)  |>
   stargazer(out = paste0(table_dir,"table_gdp_pc.tex"))
 
-# clean up the workspace again:
+# now that we are done, clean up the workspace:
 rm(list = ls())
 ```
 

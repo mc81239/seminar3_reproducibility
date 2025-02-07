@@ -5,7 +5,7 @@
 
 # Load packages required to define the pipeline -- using groundhog for reproducibility, this is a bit inefficient but works ok
 library(groundhog)
-groundhog::groundhog.library(c("targets", "dplyr", "readr", "ggplot2", "stargazer"), "2024-05-02")
+groundhog::groundhog.library(c("targets", "dplyr", "readr", "ggplot2", "stargazer"), "2025-01-01")
 
 # library(tarchetypes) # Load other packages as needed.
 
