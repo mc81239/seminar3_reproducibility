@@ -51,7 +51,7 @@ scaled_data <- data %>%
 # let's just inspect the data, and check that it actually changed...
 head(scaled_data)
 
-data$Happiness_score[1] == scaled_data$Happiness_score[1] # should be FALSE -- we could code up a warning here if we want
+data$Happiness_score[1] == scaled_data$Happiness_score[1] # should be FALSE -- we could code up a warning here if we want, checks that the first value of happiness in data is same as first in scaled... if they are the same then FALSE
 
 # if we wanted to write an intermediate/clean version, we could do so, making sure not to overwrite the original data
 saveRDS(scaled_data, "./data/processed/WHR_2017_processed.rds")
@@ -63,14 +63,14 @@ ls()
 Finally, we can run some analyses using our cleaned data:
 
 ```{r analysis}
-# we could call the cleaned data back into R at this point if we want (or not):
+# we could call the cleaned data back into R at this point if we want (or not) to check that the processed data set is clean and there are no errors:
 scaled_data <- readRDS("./data/processed/WHR_2017_processed.rds")
 
 # next we will make a very simple two-way scatter of these two scaled, and save the output to the appropriate folder.
 plot <- ggplot(scaled_data) +
           geom_point(aes(x = GDP_pc, y = Happiness_score)) +
           theme_minimal()
-ggsave(plot, file = paste0(figure_dir,"plot_gdp_pc.jpg"))
+ggsave(plot, file = paste0(figure_dir,"plot_gdp_pc.jpg")) #ggsvae will save the graph with the dimensions of the bottom right box so should specify the dimensions to be properly reproducible
 
 # finally, let's run a simple regression of these two variables, and save the output as a latex table.
 lm(Happiness_score ~ GDP_pc, data = data)  |>

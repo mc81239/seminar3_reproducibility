@@ -37,7 +37,7 @@ What's happened here? `R` has saved our new objects -- x and y -- to the workspa
 # let's clear our workspace one more time: 
 rm(list = ls())
 
-# now turn out simple operation into a function
+# now turn out simple operation into a function... pure function = for same inputs and always return correct and same output... inputs do not need to be objects... x and y are 'locally scoped objects' and so line of code defines x and y as within the brackets of the function... if wither x and y are not locally defined it will jummp up a level and call on the x or y that are defined as objevcts in main environment... must be careful about scoping of functions
 add_up <- function(x, y){
   x + y
 }
@@ -143,7 +143,7 @@ ingest_data <- function(file) {
   read_csv(file)
 }
 
-# our function to scale the data -- the code changes slightly here to allow variables to be passed through
+# our function to scale the data -- the code changes slightly here to allow variables to be passed through... 2 argumetns: tell what data file and tell what arguments want to scale
 scale_data <- function(foo, variables) {
   foo_scaled <- foo %>% 
     mutate_at(variables, ~(scale(.) %>% as.vector))
@@ -181,7 +181,7 @@ simple_plot(data_scaled, yvar = yvar, xvar = xvar, outdir = table_dir, fname = "
 rm(list = ls())
 ```
 
-This is much neater than the stream-of-consciousness script that we started with. Every step is clearly demarcated, scoped, and contained. Let's go one step further and move toward modularity. First, we are going to create a new file called `functions.R` in our functions folder. In it we will include the code we just developed above (up until the "let's run our program" line). We are then going to `source()` that file, which will generate our function objects in the workspace, and then create a new function out of those functions which executes our program. 
+This is much neater than the stream-of-consciousness script that we started with. Every step is clearly demarcated, scoped, and contained. Let's go one step further and move toward modularity. First, we are going to create a new file called `functions.R` in our functions folder. In it we will include the code we just developed above (up until the "let's run our program" line). We are then going to `source()` that file, which will generate our function objects in the workspace, and then create a new function out of those functions which executes our program. THIS IS WHAT THE CODE SHOULD LOOK LIKE... everything is scoped to a function and workspace is clean and dont risk drawing on incorrect object
 
 ```{r modular functions workflow}
 source("./R/functions/functions.R")

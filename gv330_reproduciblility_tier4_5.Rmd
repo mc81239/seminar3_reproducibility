@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Tier 5: Groundhog for Package Dependencies
 
-The best thing about `R` is all the packages. This is also the worst thing about `R` in terms of reproducibility, because packages change over time. Here we will walk through using `groundhog` for package version freezing. The primary alternative for this is `renv`, which is a more sophisticated but also heavier package. For most academic uses I think `groundhog` is sufficient, while `renv` is useful for more intense applications (and plays nicely with `targets` below), and for those who like using R projects (which we aren't doing here). You can see more about groundhog [here](https://groundhogr.com/), and `renv` [here](https://rstudio.github.io/renv/articles/renv.html).
+The best thing about `R` is all the packages. This is also the worst thing about `R` in terms of reproducibility, because packages change over time. Here we will walk through using `groundhog` for package version freezing. The primary alternative for this is `renv`, which is a more sophisticated but also heavier package. For most academic uses I think `groundhog` is sufficient, while `renv` is useful for more intense applications (and plays nicely with `targets` below), and for those who like using R projects (which we aren't doing here). You can see more about groundhog [here](https://groundhogr.com/), and `renv` [here](https://rstudio.github.io/renv/articles/renv.html). Groundhog takes package versions from a given date and save them on the machine. WHen use groundhog.library instead of regular library then it will call upon these exact packages if reproduced months into the future and means code is running with consistent packages
 
 ```{r groundhog}
 
